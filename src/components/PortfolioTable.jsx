@@ -1,6 +1,23 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import sound03 from "../assets/audio/sound03.mp3";
+import sound04 from "../assets/audio/sound04.mp3";
+import "../styles.css";
 
 const projects = [
+  {
+    name: "Challenge17",
+    live: "https://gorgeous-croissant-81191d.netlify.app/",
+    repo: "https://github.com/Lavenzo/frontendmentor-challenge17.git",
+    test: "video",
+    video: "/video/AutomationVideo08.mp4",
+  },
+  {
+    name: "Challenge16",
+    live: "https://imaginative-stardust-8a0c37.netlify.app/",
+    repo: "https://github.com/Lavenzo/frontendmentor-challenge16.git",
+    test: "video",
+    video: "/video/AutomationVideo07.mp4",
+  },
   {
     name: "Challenge15",
     live: "https://incredible-centaur-071f6a.netlify.app/",
@@ -108,6 +125,13 @@ const projects = [
   },
 ];
 
+/*
+COde XXX
+WHen hover over the hyperlink, did not change the font colour to green, and increase the font size by 1.5 times
+On mouse over did not play sound03 and on click did not play sound04
+
+*/
+
 const pageStyle = {
   backgroundColor: "#e6f7ff",
   minHeight: "100vh",
@@ -133,44 +157,117 @@ const containerStyle = {
 };
 
 const PortfolioTable = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
+  const totalPages = Math.ceil(projects.length / recordsPerPage);
+
+  const audioRefHover = useRef(null);
+  const audioRefClick = useRef(null);
+
+  const playHoverSound = () => {
+    if (audioRefHover.current) {
+      audioRefHover.current.currentTime = 0;
+      audioRefHover.current
+        .play()
+        .catch((err) => console.warn("Sound autoplay blocked:", err.message));
+    }
+  };
+
+  const playClickSound = () => {
+    if (audioRefClick.current) {
+      audioRefClick.current.currentTime = 0;
+      audioRefClick.current
+        .play()
+        .catch((err) => console.warn("Sound autoplay blocked:", err.message));
+    }
+  };
+
+  const currentData = projects.slice(
+    (currentPage - 1) * recordsPerPage,
+    currentPage * recordsPerPage
+  );
+
   return (
-    <div style={pageStyle}>
-      <div style={containerStyle}>
-        <h2
+    <div
+      style={{
+        backgroundColor: "#e6f7ff",
+        minHeight: "100vh",
+        padding: "20px",
+      }}
+    >
+      <audio ref={audioRefHover} src={sound03} preload="auto" />
+      <audio ref={audioRefClick} src={sound04} preload="auto" />
+
+      <h2
+        style={{ textAlign: "center", marginBottom: "20px", color: "#2a2a2a" }}
+      >
+        Frontend Mentor Projects Portfolio
+      </h2>
+
+      <div style={{ overflowX: "auto", maxWidth: "100%" }}>
+        <table
           style={{
-            textAlign: "center",
-            marginBottom: "20px",
-            color: "#2a2a2a",
+            width: "100%",
+            borderCollapse: "collapse",
+            fontSize: "14px",
           }}
         >
-          Frontend Mentor Projects Portfolio
-        </h2>
-        <table style={tableStyle}>
           <thead>
             <tr style={{ backgroundColor: "#f5f5f5" }}>
-              <th style={thTdStyle}>Project Challenge</th>
-              <th style={thTdStyle}>Weblink</th>
-              <th style={thTdStyle}>GitHub Repository</th>
-              <th style={thTdStyle}>Selenium Automation (User Simulation)</th>
+              <th style={{ border: "1px solid #ccc", padding: "8px" }}>
+                Project Challenge
+              </th>
+              <th style={{ border: "1px solid #ccc", padding: "8px" }}>
+                Weblink
+              </th>
+              <th style={{ border: "1px solid #ccc", padding: "8px" }}>
+                GitHub Repository
+              </th>
+              <th style={{ border: "1px solid #ccc", padding: "8px" }}>
+                Selenium Automation (User Simulation)
+              </th>
             </tr>
           </thead>
           <tbody>
-            {projects.map((p, idx) => (
+            {currentData.map((p, idx) => (
               <tr key={idx}>
-                <td style={thTdStyle}>{p.name}</td>
-                <td style={thTdStyle}>
-                  <a href={p.live} target="_blank" rel="noreferrer">
+                <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                  {p.name}
+                </td>
+                <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                  <a
+                    className="hover-link"
+                    href={p.live}
+                    target="_blank"
+                    rel="noreferrer"
+                    onMouseEnter={playHoverSound}
+                    onClick={playClickSound}
+                  >
                     {p.live}
                   </a>
                 </td>
-                <td style={thTdStyle}>
-                  <a href={p.repo} target="_blank" rel="noreferrer">
+                <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                  <a
+                    className="hover-link"
+                    href={p.repo}
+                    target="_blank"
+                    rel="noreferrer"
+                    onMouseEnter={playHoverSound}
+                    onClick={playClickSound}
+                  >
                     GitHub
                   </a>
                 </td>
-                <td style={thTdStyle}>
+                <td style={{ border: "1px solid #ccc", padding: "8px" }}>
                   {p.video ? (
-                    <a href={p.video} target="_blank" rel="noreferrer">
+                    <a
+                      className="hover-link"
+                      href={p.video}
+                      target="_blank"
+                      rel="noreferrer"
+                      onMouseEnter={playHoverSound}
+                      onClick={playClickSound}
+                    >
                       Selenium Automation Script
                     </a>
                   ) : (
@@ -181,6 +278,25 @@ const PortfolioTable = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div style={{ marginTop: "20px", fontSize: "14px" }}>
+        Page: {currentPage} / {totalPages}
+        <button
+          style={{ marginLeft: "10px" }}
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+        <button
+          style={{ marginLeft: "10px" }}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
