@@ -5,6 +5,20 @@ import "../styles.css";
 
 const projects = [
   {
+    name: "DigiDoor (Property)",
+    live: "https://zingy-custard-2099c6.netlify.app/",
+    repo: "https://github.com/Lavenzo/majorproj-digidoor.git",
+    test: "video",
+    video: "/video/AutomationVideo10.mp4",
+  },
+  {
+    name: "HCF (HotChikFeast)",
+    live: "https://dapper-sawine-0e56d1.netlify.app/",
+    repo: "https://github.com/Lavenzo/majorproj-hcf.git",
+    test: "video",
+    video: "/video/AutomationVideo09.mp4",
+  },
+  {
     name: "Challenge17",
     live: "https://gorgeous-croissant-81191d.netlify.app/",
     repo: "https://github.com/Lavenzo/frontendmentor-challenge17.git",
